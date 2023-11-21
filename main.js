@@ -52,9 +52,7 @@ function renderCards(data) {
     })
 
     let areaChartData = []; // areaChartData = [["高雄", 2], ["台北",1], ["台中", 1]]
-    let area = Object.keys(totalObj); // area output ["高雄","台北","台中"]
-    console.log(totalObj);
-    console.log(area);
+    let area = Object.keys(totalObj); // area output ["高雄","台北","台中"]    
     area.forEach(function (item, index) {
         let ary = [];
         ary.push(item);
@@ -150,12 +148,16 @@ addTicketBtn.addEventListener('click', function (e) {
     e.preventDefault();
     getCardValue();
     renderCards(data);
+    // console.log(newData);
 });
 
 regionSearch.addEventListener('change', function (e) {
     let cardTarget = e.target.value;
-    let filteredData = newData.filter((card) => card.area === cardTarget || cardTarget === '');
-    handleSearchResult(filteredData);
+    if (cardTarget === "") {
+        fetchDataAndRender();
+    } else {
+        renderCard(setectedArea);
+    };
+    searchResult.textContent = `本次搜尋共 ${filtNewData.length} 筆資料`;
 });
-
 
