@@ -7,6 +7,7 @@ const dataUrl = 'https://raw.githubusercontent.com/hexschool/js-training/main/tr
 function renderCards(data) {
     // initCard
     ticketCardArea.innerHTML = '';
+
     // renderAllCardHTML
     data.forEach((card) => {
         ticketCardArea.innerHTML += `
@@ -38,6 +39,50 @@ function renderCards(data) {
             </div>
         </div>
     </li>`;
+    });
+
+    // renderChart
+    let totalObj = {};
+    data.forEach(function (item, index) {
+        if (totalObj[item.area] == undefined) {
+            totalObj[item.area] = 1;
+        } else {
+            totalObj[item.area] += 1;
+        }
+    })
+
+    let areaChartData = []; // areaChartData = [["高雄", 2], ["台北",1], ["台中", 1]]
+    let area = Object.keys(totalObj); // area output ["高雄","台北","台中"]
+    console.log(totalObj);
+    console.log(area);
+    area.forEach(function (item, index) {
+        let ary = [];
+        ary.push(item);
+        ary.push(totalObj[item]);
+        areaChartData.push(ary);
+    })
+
+    var chart = c3.generate({
+        data: {
+            columns: areaChartData,
+            type: 'donut',
+            colors: {
+                "高雄": "#E68618",
+                "台中": "#5151D3",
+                "台北": "#26BFC7"
+            }
+        },
+        donut: {
+            title: "套票地區比重",
+            width: 20, //粗細
+            label: {
+                show: false
+            }
+        },
+        size: {
+            height: 240,
+            width: 480
+        }
     });
 }
 
@@ -87,7 +132,6 @@ function fetchDataAndRender() {
 }
 
 const addTicketForm = document.querySelector('.addTicket-form');
-// const ticketName = document.querySelector('#ticketName');
 const ticketImgUrl = document.querySelector('#ticketImgUrl');
 const ticketRegion = document.querySelector('#ticketRegion');
 const ticketPrice = document.querySelector('#ticketPrice');
@@ -114,5 +158,4 @@ regionSearch.addEventListener('change', function (e) {
     handleSearchResult(filteredData);
 });
 
-// 初始資料取得及渲染
-// fetchDataAndRender();
+
